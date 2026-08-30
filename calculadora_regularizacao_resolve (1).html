@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Regularização | Resolve Engenharia</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f5f7f8;color:#20252b}
+.wrap{max-width:760px;margin:0 auto;padding:28px 16px 50px}
+.card{background:#fff;border-radius:18px;padding:28px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.brand{font-weight:800;letter-spacing:.5px;font-size:18px;margin-bottom:6px}
+h1{font-size:30px;line-height:1.12;margin:8px 0 10px}
+.sub{color:#5c6670;margin:0 0 24px;line-height:1.5}
+.step{display:none}
+.step.active{display:block}
+label{display:block;font-weight:700;margin:18px 0 9px}
+select,input{width:100%;padding:14px;border:1px solid #cfd5da;border-radius:10px;font-size:16px;background:#fff}
+.options{display:grid;gap:10px}
+.option{border:1px solid #d8dde1;border-radius:11px;padding:13px 14px;cursor:pointer;display:flex;gap:10px;align-items:center}
+.option:hover{background:#f7f9fa}
+.option input{width:auto}
+.buttons{display:flex;gap:10px;margin-top:24px}
+button{border:0;border-radius:11px;padding:14px 18px;font-size:16px;font-weight:800;cursor:pointer}
+.primary{background:#1f6f4a;color:#fff;flex:1}
+.secondary{background:#eef1f3;color:#29313a}
+.progress{height:7px;background:#e7eaed;border-radius:99px;overflow:hidden;margin:0 0 22px}
+.bar{height:100%;width:20%;background:#1f6f4a;transition:.2s}
+.result{display:none}
+.badge{display:inline-block;padding:8px 12px;border-radius:999px;background:#eaf5ef;color:#1f6f4a;font-weight:800}
+.price{font-size:38px;font-weight:900;margin:10px 0 4px}
+.note{font-size:14px;color:#66717a;line-height:1.5}
+.box{background:#f6f8f9;border-radius:12px;padding:16px;margin-top:16px}
+.summary{line-height:1.7}
+.whats{display:block;text-align:center;text-decoration:none;background:#1f6f4a;color:#fff;padding:15px;border-radius:11px;font-weight:800;margin-top:18px}
+.restart{text-align:center;margin-top:14px}
+.restart button{background:none;color:#1f6f4a;padding:8px}
+.small{font-size:12px;color:#707980;margin-top:20px;line-height:1.45}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="brand">RESOLVE SOLUÇÕES EM ENGENHARIA</div>
+    <h1>Quanto custa regularizar meu imóvel?</h1>
+    <p class="sub">Faça uma estimativa inicial em poucos passos. O resultado é orientativo e não substitui a análise da documentação.</p>
+
+    <div id="quiz">
+      <div class="progress"><div class="bar" id="bar"></div></div>
+
+      <div class="step active">
+        <label for="city">1. Em qual cidade fica o imóvel?</label>
+        <select id="city">
+          <option value="">Selecione</option>
+          <option>Mogi Guaçu</option><option>Mogi Mirim</option><option>Piracicaba</option>
+          <option>Limeira</option><option>Outra cidade</option>
+        </select>
+      </div>
+
+      <div class="step">
+        <label>2. Qual a área construída aproximada?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="area" value="4000"> Até 100 m²</label>
+          <label class="option"><input type="radio" name="area" value="4500"> 101 a 150 m²</label>
+          <label class="option"><input type="radio" name="area" value="5500"> 151 a 200 m²</label>
+          <label class="option"><input type="radio" name="area" value="6500"> 201 a 300 m²</label>
+          <label class="option"><input type="radio" name="area" value="7500"> 301 a 400 m²</label>
+          <label class="option"><input type="radio" name="area" value="8000"> Acima de 400 m²</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <label>3. O imóvel possui projeto aprovado?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="projeto" value="sim"> Sim</label>
+          <label class="option"><input type="radio" name="projeto" value="nao"> Não</label>
+          <label class="option"><input type="radio" name="projeto" value="naosei"> Não sei</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <label>4. O imóvel possui Habite-se?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="habite" value="sim"> Sim</label>
+          <label class="option"><input type="radio" name="habite" value="nao"> Não</label>
+          <label class="option"><input type="radio" name="habite" value="naosei"> Não sei</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <label>5. A construção está averbada na matrícula?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="averbada" value="sim"> Sim</label>
+          <label class="option"><input type="radio" name="averbada" value="nao"> Não</label>
+          <label class="option"><input type="radio" name="averbada" value="naosei"> Não sei</label>
+        </div>
+      </div>
+
+      <div class="step">
+        <label>6. Qual é o seu principal objetivo?</label>
+        <div class="options">
+          <label class="option"><input type="radio" name="objetivo" value="regularizar"> Regularizar a documentação</label>
+          <label class="option"><input type="radio" name="objetivo" value="vender"> Vender o imóvel</label>
+          <label class="option"><input type="radio" name="objetivo" value="financiar"> Financiar</label>
+          <label class="option"><input type="radio" name="objetivo" value="averbar"> Averbar a construção</label>
+          <label class="option"><input type="radio" name="objetivo" value="habite"> Obter Habite-se</label>
+          <label class="option"><input type="radio" name="objetivo" value="naosei"> Não sei por onde começar</label>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button class="secondary" id="back" onclick="prev()" style="display:none">Voltar</button>
+        <button class="primary" id="next" onclick="next()">Continuar</button>
+      </div>
+    </div>
+
+    <div class="result" id="result">
+      <span class="badge" id="level"></span>
+      <h2>Estimativa inicial</h2>
+      <div class="price" id="price"></div>
+      <p class="note">Estimativa do serviço de engenharia. Taxas de Prefeitura, Receita Federal, Cartório e outros custos externos podem ser cobrados separadamente, conforme o caso.</p>
+      <div class="box">
+        <strong>Resumo informado</strong>
+        <div class="summary" id="summary"></div>
+      </div>
+      <p class="sub" style="margin-top:18px">Quer saber o valor exato e quais documentos serão necessários?</p>
+      <a class="whats" id="whats" target="_blank">📲 FALAR COM A RESOLVE PELO WHATSAPP</a>
+      <div class="restart"><button onclick="restart()">↻ Fazer nova simulação</button></div>
+      <div class="small">Esta ferramenta fornece apenas uma estimativa comercial inicial. O orçamento definitivo depende da análise do imóvel, documentação existente, área, legislação aplicável e serviços necessários.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+let current=0;
+const steps=[...document.querySelectorAll('.step')];
+const bar=document.getElementById('bar');
+
+function selected(name){
+  const el=document.querySelector('input[name="'+name+'"]:checked');
+  return el ? el.value : '';
+}
+function validate(){
+  if(current===0 && !document.getElementById('city').value){alert('Selecione a cidade.');return false}
+  if(current===1 && !selected('area')){alert('Selecione a área construída.');return false}
+  if(current===2 && !selected('projeto')){alert('Selecione uma opção.');return false}
+  if(current===3 && !selected('habite')){alert('Selecione uma opção.');return false}
+  if(current===4 && !selected('averbada')){alert('Selecione uma opção.');return false}
+  if(current===5 && !selected('objetivo')){alert('Selecione uma opção.');return false}
+  return true;
+}
+function show(){
+  steps.forEach((s,i)=>s.classList.toggle('active',i===current));
+  document.getElementById('back').style.display=current>0?'block':'none';
+  document.getElementById('next').textContent=current===steps.length-1?'CALCULAR ESTIMATIVA':'Continuar';
+  bar.style.width=((current+1)/steps.length*100)+'%';
+}
+function next(){
+  if(!validate())return;
+  if(current<steps.length-1){current++;show()}else calculate();
+}
+function prev(){if(current>0){current--;show()}}
+function calculate(){
+  let base=Number(selected('area'));
+  let points=0;
+  if(selected('projeto')==='nao')points+=2;
+  if(selected('projeto')==='naosei')points+=1;
+  if(selected('habite')==='nao')points+=2;
+  if(selected('habite')==='naosei')points+=1;
+  if(selected('averbada')==='nao')points+=1;
+  if(selected('averbada')==='naosei')points+=1;
+
+  let min=base, max=base+1000;
+  if(points>=5){min=Math.min(8000,base+1000);max=Math.min(8000,base+1500)}
+  else if(points>=3){min=Math.min(8000,base+500);max=Math.min(8000,base+1000)}
+  else {min=base;max=Math.min(8000,base+500)}
+
+  // Garante faixas comerciais coerentes
+  min=Math.round(min/500)*500; max=Math.round(max/500)*500;
+  if(max<min)max=min;
+  let level=points>=5?'Regularização complexa':points>=3?'Regularização intermediária':'Regularização possivelmente simples';
+
+  const areaText=document.querySelector('input[name="area"]:checked').parentElement.innerText.trim();
+  const city=document.getElementById('city').value;
+  const map={sim:'Sim',nao:'Não',naosei:'Não sei'};
+  const summary=`<div><strong>Cidade:</strong> ${city}</div>
+  <div><strong>Área:</strong> ${areaText}</div>
+  <div><strong>Projeto aprovado:</strong> ${map[selected('projeto')]}</div>
+  <div><strong>Habite-se:</strong> ${map[selected('habite')]}</div>
+  <div><strong>Averbada:</strong> ${map[selected('averbada')]}</div>`;
+
+  document.getElementById('level').textContent=level;
+  document.getElementById('price').textContent='R$ '+fmt(min)+' a R$ '+fmt(max);
+  document.getElementById('summary').innerHTML=summary;
+
+  const msg=`Olá, fiz a Calculadora de Regularização no site da Resolve. Meu imóvel fica em ${city}, tem ${areaText.replace(/\n/g,' ')}. Projeto aprovado: ${map[selected('projeto')]}. Habite-se: ${map[selected('habite')]}. Construção averbada: ${map[selected('averbada')]}. Gostaria de receber uma avaliação e orçamento.`;
+  // TROQUE 5511999999999 pelo número comercial da Resolve, com DDI + DDD.
+  document.getElementById('whats').href='https://wa.me/5519998571244?text='+encodeURIComponent(msg);
+
+  document.getElementById('quiz').style.display='none';
+  document.getElementById('result').style.display='block';
+}
+function fmt(n){return n.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0})}
+function restart(){current=0;document.getElementById('result').style.display='none';document.getElementById('quiz').style.display='block';show()}
+show();
+</script>
+</body>
+</html>

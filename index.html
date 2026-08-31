@@ -37,6 +37,7 @@ button{border:0;border-radius:11px;padding:14px 18px;font-size:16px;font-weight:
 .restart button{background:none;color:#1f6f4a;padding:8px}
 .small{font-size:12px;color:#707980;margin-top:20px;line-height:1.45}
 </style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -108,6 +109,14 @@ button{border:0;border-radius:11px;padding:14px 18px;font-size:16px;font-weight:
         </div>
       </div>
 
+      <div class="step">
+        <label>7. Para receber sua estimativa, informe seus dados</label>
+        <label for="nome" style="font-weight:400;margin:14px 0 6px">Nome</label>
+        <input type="text" id="nome" placeholder="Seu nome completo" autocomplete="name">
+        <label for="telefone" style="font-weight:400;margin:14px 0 6px">WhatsApp</label>
+        <input type="tel" id="telefone" placeholder="(19) 99999-9999" autocomplete="tel">
+      </div>
+
       <div class="buttons">
         <button class="secondary" id="back" onclick="prev()" style="display:none">Voltar</button>
         <button class="primary" id="next" onclick="next()">Continuar</button>
@@ -132,6 +141,14 @@ button{border:0;border-radius:11px;padding:14px 18px;font-size:16px;font-weight:
 </div>
 
 <script>
+// ====== CONFIGURAÇÃO DO EMAILJS ======
+// Troque os 3 valores abaixo pelos códigos da sua conta em emailjs.com
+const EMAILJS_PUBLIC_KEY = "X69wKU436Of7CKKne";
+const EMAILJS_SERVICE_ID = "service_4s5isgj";
+const EMAILJS_TEMPLATE_ID = "template_boutz2q";
+if(window.emailjs) emailjs.init(EMAILJS_PUBLIC_KEY);
+// =======================================
+
 let current=0;
 const steps=[...document.querySelectorAll('.step')];
 const bar=document.getElementById('bar');
@@ -147,6 +164,12 @@ function validate(){
   if(current===3 && !selected('habite')){alert('Selecione uma opção.');return false}
   if(current===4 && !selected('averbada')){alert('Selecione uma opção.');return false}
   if(current===5 && !selected('objetivo')){alert('Selecione uma opção.');return false}
+  if(current===6){
+    const nome=document.getElementById('nome').value.trim();
+    const tel=document.getElementById('telefone').value.trim();
+    if(!nome){alert('Digite seu nome.');return false}
+    if(tel.replace(/\D/g,'').length<10){alert('Digite um WhatsApp válido, com DDD.');return false}
+  }
   return true;
 }
 function show(){
@@ -182,8 +205,12 @@ function calculate(){
 
   const areaText=document.querySelector('input[name="area"]:checked').parentElement.innerText.trim();
   const city=document.getElementById('city').value;
+  const nome=document.getElementById('nome').value.trim();
+  const telefone=document.getElementById('telefone').value.trim();
   const map={sim:'Sim',nao:'Não',naosei:'Não sei'};
-  const summary=`<div><strong>Cidade:</strong> ${city}</div>
+  const summary=`<div><strong>Nome:</strong> ${nome}</div>
+  <div><strong>WhatsApp:</strong> ${telefone}</div>
+  <div><strong>Cidade:</strong> ${city}</div>
   <div><strong>Área:</strong> ${areaText}</div>
   <div><strong>Projeto aprovado:</strong> ${map[selected('projeto')]}</div>
   <div><strong>Habite-se:</strong> ${map[selected('habite')]}</div>
@@ -193,9 +220,24 @@ function calculate(){
   document.getElementById('price').textContent='R$ '+fmt(min)+' a R$ '+fmt(max);
   document.getElementById('summary').innerHTML=summary;
 
-  const msg=`Olá, fiz a Calculadora de Regularização no site da Resolve. Meu imóvel fica em ${city}, tem ${areaText.replace(/\n/g,' ')}. Projeto aprovado: ${map[selected('projeto')]}. Habite-se: ${map[selected('habite')]}. Construção averbada: ${map[selected('averbada')]}. Gostaria de receber uma avaliação e orçamento.`;
+  const msg=`Olá, meu nome é ${nome}. Fiz a Calculadora de Regularização no site da Resolve. Meu WhatsApp é ${telefone}. Meu imóvel fica em ${city}, tem ${areaText.replace(/\n/g,' ')}. Projeto aprovado: ${map[selected('projeto')]}. Habite-se: ${map[selected('habite')]}. Construção averbada: ${map[selected('averbada')]}. Gostaria de receber uma avaliação e orçamento.`;
   // TROQUE 5511999999999 pelo número comercial da Resolve, com DDI + DDD.
   document.getElementById('whats').href='https://wa.me/5519998571244?text='+encodeURIComponent(msg);
+
+  // Envia o lead automaticamente por e-mail via EmailJS
+  if(window.emailjs && EMAILJS_SERVICE_ID.indexOf('COLE_AQUI')===-1){
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      nome: nome,
+      telefone: telefone,
+      cidade: city,
+      area: areaText.replace(/\n/g,' '),
+      projeto: map[selected('projeto')],
+      habite: map[selected('habite')],
+      averbada: map[selected('averbada')],
+      objetivo: selected('objetivo'),
+      estimativa: 'R$ '+fmt(min)+' a R$ '+fmt(max)
+    }).catch(function(err){ console.error('Erro ao enviar lead por e-mail:', err); });
+  }
 
   document.getElementById('quiz').style.display='none';
   document.getElementById('result').style.display='block';
